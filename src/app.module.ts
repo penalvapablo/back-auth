@@ -8,7 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     AuthModule,
     MongooseModule.forRoot(
-      'mongodb+srv://pablo:<password>@learn-node.tp5yo.mongodb.net/chatDB?retryWrites=true&w=majority',
+      'mongodb+srv://pablo:coderhouse@learn-node.tp5yo.mongodb.net/chatDB?retryWrites=true&w=majority',
     ),
   ],
   controllers: [AppController],
