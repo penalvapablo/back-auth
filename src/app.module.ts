@@ -9,7 +9,6 @@ import { ConfigModule } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.development.env',
     }),
     AuthModule,
     MongooseModule.forRoot(process.env.MONGO_DB),
