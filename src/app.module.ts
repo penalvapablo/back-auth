@@ -3,13 +3,16 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.development.env',
+    }),
     AuthModule,
-    MongooseModule.forRoot(
-      'mongodb+srv://pablo:coderhouse@learn-node.tp5yo.mongodb.net/chatDB?retryWrites=true&w=majority',
-    ),
+    MongooseModule.forRoot(process.env.MONGO_DB),
   ],
   controllers: [AppController],
   providers: [AppService],
