@@ -1,13 +1,13 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   UseGuards,
   Headers,
+  HttpException,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
@@ -17,25 +17,36 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // @UseGuards(JwtAuthGuard)
+  // @Get()
+  // findAll() {
+  //   console.log('findAll');
+  //   // return this.usersService.findAll();
+  // }
   @UseGuards(JwtAuthGuard)
-  @Get()
-  findAll() {
-    console.log('findAll');
-    // return this.usersService.findAll();
-  }
-
   @Get('/me')
-  findOne(@Headers('authorization') token: string) {
-    return this.usersService.findMe(token);
+  async findOne(@Headers('authorization') token: string): Promise<any> {
+    try {
+      return await this.usersService.findMe(token);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
+  }
+  @UseGuards(JwtAuthGuard)
+  @Put('/me')
+  async update(
+    @Headers('authorization') token: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    try {
+      return await this.usersService.updateMe(token, updateUserDto);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    // return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    // return this.usersService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   // return this.usersService.remove(+id);
+  // }
 }
