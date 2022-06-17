@@ -24,14 +24,19 @@ export class UsersController {
     // return this.usersService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/me')
-  findOne(@Headers('authorization') token: string) {
-    return this.usersService.findMe(token);
+  async findOne(@Headers('authorization') token: string) {
+    return await this.usersService.findMe(token);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    // return this.usersService.update(+id, updateUserDto);
+  @UseGuards(JwtAuthGuard)
+  @Patch('/me/edit')
+  update(
+    @Headers('authorization') token: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.update(token, updateUserDto);
   }
 
   @Delete(':id')
