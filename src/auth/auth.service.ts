@@ -25,7 +25,16 @@ export class AuthService {
       registerLoginDto.password,
       10,
     );
-    const createdUser = new this.userModel(registerLoginDto);
+
+    const { email, password } = registerLoginDto; //to asegurate that we don't pass more props than we need
+
+    const photo = `https://avatars.dicebear.com/api/initials/${email[0]}.svg`;
+
+    const createdUser = new this.userModel({
+      email,
+      password,
+      photo,
+    });
     await createdUser.save();
     const payload = { userId: createdUser._id.toString() };
     return {
